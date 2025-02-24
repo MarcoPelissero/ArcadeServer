@@ -18,6 +18,7 @@ public class Servizio {
     private String nome;
     private String descrizione;
     private double prezzo;
+    private String categoria;
 
     @OneToMany(mappedBy = "servizio")
     private List<Ordine> ordini;
@@ -63,4 +64,9 @@ public class Servizio {
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
     }
+    public String getCategoria() {
+    	return categoria;
+    }
+    public void setCategoria() {
+    	this.categoria=categoria;    }
 }
