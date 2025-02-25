@@ -1,6 +1,7 @@
 package com.example.arcadeServer.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,13 +20,19 @@ public class Recensione {
     
     @ManyToOne
     @JoinColumn(name = "utente_id")
-    @JsonBackReference
+    @JsonBackReference(value = "user-recensioni")
     private Utente utente;
     
-    public Recensione(String commento, int voto, Utente utente) {
+    @ManyToOne
+    @JoinColumn(name = "servizio_id")
+    @JsonBackReference(value = "servizio-recensioni")
+    private Servizio servizio;
+    
+    public Recensione(String commento, int voto, Utente utente, Servizio servizio) {
     	this.commento = commento;
     	this.voto = voto;
     	this.utente = utente;
+    	this.servizio = servizio;
     }
     
     public Recensione() {}
@@ -57,6 +64,14 @@ public class Recensione {
 
 	public void setUtente(Utente utente) {
 		this.utente = utente;
+	}
+
+	public Servizio getServizio() {
+		return servizio;
+	}
+
+	public void setServizio(Servizio servizio) {
+		this.servizio = servizio;
 	}
     
     

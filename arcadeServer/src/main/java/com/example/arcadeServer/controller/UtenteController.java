@@ -38,7 +38,7 @@ public class UtenteController
 	        return utenteRepository.findAll();
 	    }
 	    
-	    @PostMapping
+	    @PostMapping("/addUser")
 	    public Utente createUtente(@RequestBody Utente utente) {
 	        // Il parametro @RequestBody converte il JSON della richiesta in un oggetto Author
 	        // Salva il nuovo autore nel database e restituisce l'oggetto salvato (inclusi eventuali campi generati, come l'ID)
