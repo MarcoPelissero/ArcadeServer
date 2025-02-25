@@ -1,5 +1,8 @@
 package com.example.arcadeServer.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,13 +20,16 @@ public class Ordine {
     private String stato;
     @ManyToOne
     @JoinColumn(name = "utente_id")
+    @JsonBackReference(value = "user-ordini")
     private Utente utente;
     
     @ManyToOne
     @JoinColumn(name = "servizio_id")
+    @JsonBackReference(value = "servizio-ordini")
     private Servizio servizio;
     
     @OneToOne(mappedBy = "ordine")
+    @JsonBackReference
     private Pagamento pagamento;
     
     public Ordine(String stato, Utente utente, Servizio servizio, Pagamento pagamento) {

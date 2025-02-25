@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,12 +37,17 @@ public class Servizio {
     private String categoria;
 
     @OneToMany(mappedBy = "servizio")
+    @JsonManagedReference(value = "servizio-ordini")
     private List<Ordine> ordini;
     
     @ManyToOne
     @JoinColumn(name = "utente_id")
-    @JsonBackReference
+    @JsonBackReference(value = "user-services")
     private Utente utente;
+    
+    @OneToMany(mappedBy = "servizio")
+    @JsonManagedReference(value = "servizio-recensioni")
+    private List <Recensione> recensioni;
     
     
     public Servizio (String nome, String descrizione, Double prezzo, String categoria, Utente utente) {
@@ -114,6 +120,14 @@ public class Servizio {
 
 	public void setUtente(Utente utente) {
 		this.utente = utente;
+	}
+
+	public List<Recensione> getRecensioni() {
+		return recensioni;
+	}
+
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
 	}
 	
 	

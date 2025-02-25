@@ -1,16 +1,14 @@
 package com.example.arcadeServer;
 
-import java.sql.Date;
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.example.arcadeServer.model.Ordine;
+import com.example.arcadeServer.model.Recensione;
 import com.example.arcadeServer.model.Servizio;
 import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.OrdineRepository;
+import com.example.arcadeServer.repository.RecensioneRepository;
 import com.example.arcadeServer.repository.ServizioRepository;
 import com.example.arcadeServer.repository.UtenteRepository;
 
@@ -26,7 +24,8 @@ public class DataLoader implements CommandLineRunner
     @Autowired 
     private ServizioRepository servizioRepository;
     
-    
+    @Autowired
+    private RecensioneRepository recensioneRepository;
 
 
 	/**
@@ -37,12 +36,29 @@ public class DataLoader implements CommandLineRunner
 	{
 		if (userRepository.count() == 0)
 		{
+			
 			Utente adminUser = new Utente("nome1", 
 					"cognome1",
 					"freelance",
 					"mario.rossi@example.com", 
-					"password1" 
-			);
+					"password1" );
+			
+			Servizio servizio = new Servizio("servizio1", 
+					"descrizione servizio 1",
+					60.00,
+					"Graphic Design",
+					adminUser
+	
+			);;
+			Servizio servizioAltro;
+			
+			
+//			Utente adminUser = new Utente("nome1", 
+//					"cognome1",
+//					"freelance",
+//					"mario.rossi@example.com", 
+//					"password1" 
+//			);
 			userRepository.save(adminUser);
 			
 			Utente user2 = new Utente("nome2", 
@@ -64,7 +80,7 @@ public class DataLoader implements CommandLineRunner
 			
 			if (servizioRepository.count() == 0)
 			{
-				Servizio servizio = new Servizio("servizio1", 
+				servizio = new Servizio("servizio1", 
 						"descrizione servizio 1",
 						60.00,
 						"Graphic Design",
@@ -74,7 +90,7 @@ public class DataLoader implements CommandLineRunner
 				servizioRepository.save(servizio);
 				
 				
-				Servizio servizioAltro = new Servizio("servizio2", 
+				servizioAltro = new Servizio("servizio2", 
 						"descrizione servizio 2",
 						160.00,
 						"Web Development",
@@ -91,6 +107,29 @@ public class DataLoader implements CommandLineRunner
 		
 				);
 				servizioRepository.save(servizioAltro1);
+				
+			}
+			
+			if (recensioneRepository.count() == 0)
+			{
+				Recensione recensione = new Recensione("Servizio impeccabile, molto soddisfatto del risultato finale. Consigliatissimo!", 
+						4,
+						user3, 
+						servizio
+		
+				);
+				recensioneRepository.save(recensione);
+				
+				Recensione recensione1 = new Recensione("Molto professionale e veloce, ma avrei preferito una comunicazione un po' più rapida.", 
+						2,
+						user2,
+						servizio
+		
+				);
+				recensioneRepository.save(recensione1);
+				
+				
+				
 				
 			}
 

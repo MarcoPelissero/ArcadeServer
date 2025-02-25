@@ -2,6 +2,7 @@ package com.example.arcadeServer.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -24,22 +25,22 @@ public class Utente
 	private String ruolo;
 	
 	@OneToMany(mappedBy="utente")
-	@JsonManagedReference
+	@JsonManagedReference(value = "user-services")
 	private List<Servizio> servizi;
 	
 	@OneToMany(mappedBy = "utente")
-	@JsonManagedReference
+	@JsonManagedReference(value = "user-ordini")
     private List<Ordine> ordini;
 
     @OneToMany(mappedBy = "utente")
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-recensioni")
     private List<Recensione> recensioni;
     
     private String email;
     
     private String password;
     
-    public Utente(String nome, String cognome,String ruolo,String email, String password)
+    public Utente(String nome, String cognome,String ruolo, String email, String password)
 	{
 		this.nome = nome;
 		this.cognome=cognome;
