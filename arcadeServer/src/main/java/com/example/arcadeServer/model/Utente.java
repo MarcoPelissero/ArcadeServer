@@ -19,6 +19,8 @@ public class Utente
 	
 	private String nome;
 	
+	private String cognome;
+	
 	private String ruolo;
 	
 	@OneToMany(mappedBy="utente")
@@ -33,6 +35,15 @@ public class Utente
     private String email;
     
     private String password;
+    
+    public Utente(String nome, String cognome,String ruolo,String email, String password)
+	{
+		this.nome = nome;
+		this.cognome=cognome;
+		this.ruolo=ruolo;
+		this.email = email;
+		this.password = password;
+	}
 	
 	public Long getId() {
         return id;
