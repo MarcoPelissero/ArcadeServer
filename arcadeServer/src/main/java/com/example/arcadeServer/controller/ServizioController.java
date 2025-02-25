@@ -3,6 +3,7 @@ package com.example.arcadeServer.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.example.arcadeServer.repository.ServizioRepository;
 
 @RestController
 @RequestMapping("/servizi")
+@CrossOrigin(origins = {})
 public class ServizioController
 {
 	@Autowired
@@ -35,6 +37,7 @@ public class ServizioController
     // Mappato sulla richiesta HTTP POST all'endpoint "/servizios"
     @PostMapping
     public Servizio createServizio(@RequestBody Servizio servizio) {
+    	System.out.println(servizio.getUtente());
         // Salva il nuovo libro nel database e restituisce l'oggetto salvato (potrebbe includere l'ID generato)
         return servizioRepository.save(servizio);
     }

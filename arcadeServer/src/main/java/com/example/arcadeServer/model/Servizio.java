@@ -2,6 +2,10 @@ package com.example.arcadeServer.model;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,8 +40,20 @@ public class Servizio {
     
     @ManyToOne
     @JoinColumn(name = "utente_id")
+    @JsonBackReference
     private Utente utente;
     
+    
+    public Servizio (String nome, String descrizione, Double prezzo, String categoria, Utente utente) {
+    	this.nome = nome;
+    	this.descrizione = descrizione;
+    	this.prezzo = prezzo;
+    	this.categoria = categoria;
+    	this.utente = utente;
+
+    }
+    
+    public Servizio() {}
     
     public Long getId() {
         return id;
@@ -75,9 +91,31 @@ public class Servizio {
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
     }
-    public String getCategoria() {
-    	return categoria;
-    }
-    public void setCategoria() {
-    	this.categoria=categoria;    }
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	public List<Ordine> getOrdini() {
+		return ordini;
+	}
+
+	public void setOrdini(List<Ordine> ordini) {
+		this.ordini = ordini;
+	}
+
+	public Utente getUtente() {
+		return utente;
+	}
+
+	public void setUtente(Utente utente) {
+		this.utente = utente;
+	}
+	
+	
+   
 }

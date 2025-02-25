@@ -2,7 +2,7 @@ package com.example.arcadeServer.model;
 
 import java.util.List;
 
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,12 +24,15 @@ public class Utente
 	private String ruolo;
 	
 	@OneToMany(mappedBy="utente")
+	@JsonManagedReference
 	private List<Servizio> servizi;
 	
 	@OneToMany(mappedBy = "utente")
+	@JsonManagedReference
     private List<Ordine> ordini;
 
     @OneToMany(mappedBy = "utente")
+    @JsonManagedReference
     private List<Recensione> recensioni;
     
     private String email;
@@ -44,6 +47,8 @@ public class Utente
 		this.email = email;
 		this.password = password;
 	}
+    
+    public Utente() {}
 	
 	public Long getId() {
         return id;
@@ -83,6 +88,40 @@ public class Utente
     public void setPassword(String password) {
     	this.password=password;
     }
+
+	public String getCognome() {
+		return cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
+	public List<Servizio> getServizi() {
+		return servizi;
+	}
+
+	public void setServizi(List<Servizio> servizi) {
+		this.servizi = servizi;
+	}
+
+	public List<Ordine> getOrdini() {
+		return ordini;
+	}
+
+	public void setOrdini(List<Ordine> ordini) {
+		this.ordini = ordini;
+	}
+
+	public List<Recensione> getRecensioni() {
+		return recensioni;
+	}
+
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
+	}
+    
+    
 
 }
 

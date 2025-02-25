@@ -26,6 +26,16 @@ public class Ordine {
     @OneToOne(mappedBy = "ordine")
     private Pagamento pagamento;
     
+    public Ordine(String stato, Utente utente, Servizio servizio, Pagamento pagamento) {
+    	this.stato = stato;
+    	this.utente = utente;
+    	this.servizio = servizio;
+    	this.pagamento = pagamento;
+    }
+    
+    public Ordine() {}
+    
+    
     public Long getId() {
         return id;
     }
