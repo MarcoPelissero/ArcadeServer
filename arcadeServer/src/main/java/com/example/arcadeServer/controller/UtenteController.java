@@ -84,7 +84,10 @@ public class UtenteController
 
 	        return Collections.singletonMap("message", "Profilo aggiornato con successo");
 	    }
+	    
 	    //metodo per ottenere il token dell'use autenticato
+	    //Recupera il token Bearer dalla richiesta.
+	    //Se il token è valido, cerca l'utente corrispondente e lo restituisce.
 	    private AuthUser getAuthenticatedUser(HttpServletRequest request) {
 	        // Estrai il token dalla richiesta
 	        String token = getTokenFromRequest(request);
@@ -97,6 +100,8 @@ public class UtenteController
 	        return findUserByToken(token);
 	    }
 
+	    //Estrae il token Bearer dall'header "Authorization".
+	    //Se il formato è corretto ("Bearer <TOKEN>"), rimuove "Bearer " e restituisce solo il token.
 	    private String getTokenFromRequest(HttpServletRequest request) {
 	        // Estrai l'header "Authorization" dalla richiesta
 	        String authorizationHeader = request.getHeader("Authorization");
@@ -109,6 +114,8 @@ public class UtenteController
 	        return null; // Se il token non è presente o non è nel formato corretto
 	    }
 
+	    //Cerca nel database un utente che abbia il token corrispondente.
+	    //Se lo trova, lo restituisce. Altrimenti, ritorna null.
 	    private AuthUser findUserByToken(String token) {
 	        List<AuthUser> users = authRepo.findAll(); // Recupera tutti gli utenti dal repository
 	        for (AuthUser u : users) {
@@ -129,18 +136,18 @@ public class UtenteController
 	    /*@PutMapping("/{id}")
 	    public Utente updateUtente(@PathVariable Long id, @RequestBody Utente utenteDetails) {
 	    	Utente utente = utenteRepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
 
 	       
 	        utente.setNome(utenteDetails.getNome());
 
-	        return utenteRepository.save(utente);
+	        return utenteRepository.save(utenteDetails);
 	    }*/
 
 	    @DeleteMapping("/{id}")
 	    public void deleteUtente(@PathVariable Long id) {
 	        Utente utente = utenteRepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
 
 	        utenteRepository.delete(utente);
 	    }
