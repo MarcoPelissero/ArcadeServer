@@ -17,7 +17,6 @@ import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Pagamento;
 import com.example.arcadeServer.repository.AuthUserRepository;
 import com.example.arcadeServer.repository.PagamentoRepository;
-import java.util.Collections;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

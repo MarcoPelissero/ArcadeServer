@@ -30,7 +30,6 @@ public class PagamentoService {
         Pagamento pagamento = new Pagamento();
         pagamento.setOrdine(ordine);
         pagamento.setMetodo(metodo);
-        pagamento.setTransactionId(transactionId);
         pagamento.setStato(stato);
        
 
