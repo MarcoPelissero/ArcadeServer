@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.arcadeServer.exception.ResourceNotFoundException;
 import com.example.arcadeServer.model.Servizio;
+import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.ServizioRepository;
+import com.example.arcadeServer.repository.UtenteRepository;
 
 @RestController
 @RequestMapping("/servizi")
@@ -24,6 +26,9 @@ public class ServizioController
 {
 	@Autowired
     private ServizioRepository servizioRepository;
+	
+	@Autowired 
+	private UtenteRepository utenteRepo;
 
     // Metodo per ottenere la lista di tutti i libri
     // Mappato sulla richiesta HTTP GET all'endpoint "/servizios"
@@ -35,9 +40,11 @@ public class ServizioController
 
     // Metodo per creare un nuovo libro
     // Mappato sulla richiesta HTTP POST all'endpoint "/servizios"
-    @PostMapping
-    public Servizio createServizio(@RequestBody Servizio servizio) {
-    	System.out.println(servizio.getUtente());
+    @PostMapping("/{id}")
+    public Servizio createServizio(@PathVariable Long id, @RequestBody Servizio servizio) {
+    	Utente utente = utenteRepo.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+    	servizio.setUtente(utente);
         // Salva il nuovo libro nel database e restituisce l'oggetto salvato (potrebbe includere l'ID generato)
         return servizioRepository.save(servizio);
     }

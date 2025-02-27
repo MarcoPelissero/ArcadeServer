@@ -1,6 +1,7 @@
 package com.example.arcadeServer.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.UtenteRepository;
 import com.example.arcadeServer.exception.ResourceNotFoundException;
@@ -51,6 +53,27 @@ public class UtenteController
 	        return utenteRepository.findById(id)
 	                .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
 	    }
+	    
+	    @PostMapping("/getlogged")
+	    public Utente getUtenteByEmail(@RequestBody String email) {
+	    	
+	    	List<Utente> user = utenteRepository.findAll();
+			for(Utente u: user) {
+				
+
+				String mail = u.getEmail();
+				String otherMail = email;
+				otherMail = otherMail.substring(0, otherMail.length()-1);
+				otherMail = otherMail.substring(1, otherMail.length());
+
+				if(mail.equals(otherMail)) {
+					System.out.println("found him");
+					return u;}
+			}
+			System.out.println("returning null");
+			return null;
+	    }
+	    
 
 	    // Metodo per aggiornare un autore esistente
 	    // Mappato sulla richiesta HTTP PUT all'endpoint "/authors/{id}"

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,6 +40,9 @@ public class Servizio {
     @OneToMany(mappedBy = "servizio")
     @JsonManagedReference(value = "servizio-ordini")
     private List<Ordine> ordini;
+    
+    @Column(name = "utente_id", updatable = false, insertable = false)
+    private Long utenteId;
     
     @ManyToOne
     @JoinColumn(name = "utente_id")
