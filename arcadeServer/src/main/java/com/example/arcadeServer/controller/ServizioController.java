@@ -3,19 +3,36 @@ package com.example.arcadeServer.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.arcadeServer.exception.ResourceNotFoundException;
 import com.example.arcadeServer.model.Servizio;
+import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.ServizioRepository;
+import com.example.arcadeServer.repository.UtenteRepository;
 
-@CrossOrigin(origins = "http://localhost:8080") // Consente richieste cross-origin dal frontend
-@RestController // Indica che questa è una classe controller per REST
-@RequestMapping("/servizi") // Mappatura del percorso base per tutte le richieste a "/servizi"
-public class ServizioController {
 
-    @Autowired
+@RestController
+@RequestMapping("/servizi")
+@CrossOrigin(origins = {})
+public class ServizioController
+{
+	@Autowired
+
     private ServizioRepository servizioRepository;
+	
+	@Autowired 
+	private UtenteRepository utenteRepo;
 
     /**
      * Ottiene tutti i servizi
@@ -26,13 +43,15 @@ public class ServizioController {
         return servizioRepository.findAll();
     }
 
-    /**
-     * Crea un nuovo servizio
-     * @param servizio Oggetto servizio da creare
-     * @return Servizio creato
-     */
-    @PostMapping
-    public Servizio createServizio(@RequestBody Servizio servizio) {
+    // Metodo per creare un nuovo libro
+    // Mappato sulla richiesta HTTP POST all'endpoint "/servizios"
+    @PostMapping("/{id}")
+    public Servizio createServizio(@PathVariable Long id, @RequestBody Servizio servizio) {
+    	Utente utente = utenteRepo.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+    	servizio.setUtente(utente);
+        // Salva il nuovo libro nel database e restituisce l'oggetto salvato (potrebbe includere l'ID generato)
+
         return servizioRepository.save(servizio);
     }
 

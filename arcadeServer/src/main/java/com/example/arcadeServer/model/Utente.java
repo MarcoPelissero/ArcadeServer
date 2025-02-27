@@ -2,7 +2,8 @@ package com.example.arcadeServer.model;
 
 import java.util.List;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,19 +25,22 @@ public class Utente
 	private String ruolo;
 	
 	@OneToMany(mappedBy="utente")
+	@JsonManagedReference(value = "user-services")
 	private List<Servizio> servizi;
 	
 	@OneToMany(mappedBy = "utente")
+	@JsonManagedReference(value = "user-ordini")
     private List<Ordine> ordini;
 
     @OneToMany(mappedBy = "utente")
+    @JsonManagedReference(value = "user-recensioni")
     private List<Recensione> recensioni;
     
     private String email;
     
     private String password;
     
-    public Utente(String nome, String cognome,String ruolo,String email, String password)
+    public Utente(String nome, String cognome,String ruolo, String email, String password)
 	{
 		this.nome = nome;
 		this.cognome=cognome;
@@ -44,6 +48,8 @@ public class Utente
 		this.email = email;
 		this.password = password;
 	}
+    
+    public Utente() {}
 	
 	public Long getId() {
         return id;
@@ -83,6 +89,40 @@ public class Utente
     public void setPassword(String password) {
     	this.password=password;
     }
+
+	public String getCognome() {
+		return cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
+	public List<Servizio> getServizi() {
+		return servizi;
+	}
+
+	public void setServizi(List<Servizio> servizi) {
+		this.servizi = servizi;
+	}
+
+	public List<Ordine> getOrdini() {
+		return ordini;
+	}
+
+	public void setOrdini(List<Ordine> ordini) {
+		this.ordini = ordini;
+	}
+
+	public List<Recensione> getRecensioni() {
+		return recensioni;
+	}
+
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
+	}
+    
+    
 
 }
 

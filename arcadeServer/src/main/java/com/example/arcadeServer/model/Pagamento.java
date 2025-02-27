@@ -33,6 +33,9 @@ public class Pagamento {
     @JoinColumn(name = "ordine_id")
     private Ordine ordine;
     
+    
+
+    
     public Long getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package com.example.arcadeServer.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -36,6 +39,18 @@ public class AuthUserController
 	 * @return result: messaggio di errore o di successo
 	 * Metodo che gestisce il login di uno user già esistente tramite email e password
 	 */
+	
+	
+	@PostMapping("/profile")
+	public AuthUser authUser (@RequestBody Object token) {
+		List<AuthUser> user = authRepo.findAll();
+		for(AuthUser u: user) {
+			String tok = u.getToken();
+			if(u.getToken()!=null && tok.equals(token)) return u;
+		}
+		return null;
+	}
+	
 	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> body) // il corpo della HTTP da formato JSON si trasforma in Map 
