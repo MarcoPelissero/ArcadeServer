@@ -2,7 +2,10 @@ package com.example.arcadeServer.controller;
 
 import java.util.Collections;
 import java.util.List;
+
 import java.util.Map;
+
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.AuthUserRepository;
@@ -133,7 +137,34 @@ public class UtenteController
 	                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 	    }
 	    
+
 	    /*@PutMapping("/{id}")
+
+	    @PostMapping("/getlogged")
+	    public Utente getUtenteByEmail(@RequestBody String email) {
+	    	
+	    	List<Utente> user = utenteRepository.findAll();
+			for(Utente u: user) {
+				
+
+				String mail = u.getEmail();
+				String otherMail = email;
+				otherMail = otherMail.substring(0, otherMail.length()-1);
+				otherMail = otherMail.substring(1, otherMail.length());
+
+				if(mail.equals(otherMail)) {
+					System.out.println("found him");
+					return u;}
+			}
+			System.out.println("returning null");
+			return null;
+	    }
+	    
+
+	    // Metodo per aggiornare un autore esistente
+	    // Mappato sulla richiesta HTTP PUT all'endpoint "/authors/{id}"
+	    @PutMapping("/{id}")
+
 	    public Utente updateUtente(@PathVariable Long id, @RequestBody Utente utenteDetails) {
 	    	Utente utente = utenteRepository.findById(id)
 	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
