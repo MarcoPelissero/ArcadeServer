@@ -138,7 +138,7 @@ public class UtenteController
 	    }
 	    
 
-	    /*@PutMapping("/{id}")
+	    @PutMapping("/{id}")
 
 	    @PostMapping("/getlogged")
 	    public Utente getUtenteByEmail(@RequestBody String email) {
@@ -173,7 +173,7 @@ public class UtenteController
 	        utente.setNome(utenteDetails.getNome());
 
 	        return utenteRepository.save(utenteDetails);
-	    }*/
+	    }
 
 	    @DeleteMapping("/{id}")
 	    public void deleteUtente(@PathVariable Long id) {
