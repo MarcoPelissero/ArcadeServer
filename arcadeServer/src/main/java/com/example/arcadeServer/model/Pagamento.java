@@ -26,9 +26,6 @@ public class Pagamento {
     @NotNull
     private String stato;
     
-    @Column(unique = true)
-    private String transactionId;
-    
     @OneToOne
     @JoinColumn(name = "ordine_id")
     private Ordine ordine;
@@ -62,12 +59,7 @@ public class Pagamento {
     public void setStato(String stato) {
     	this.stato=stato;
     }
-    public String getTransactionId() {
-    	return transactionId;
-    }
-    public void setTransactionId(String transactionId) {
-    	this.transactionId=transactionId;
-    }
+    
     public Ordine getOrdine() {
     	return ordine;
     }

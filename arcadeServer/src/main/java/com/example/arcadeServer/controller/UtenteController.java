@@ -126,6 +126,25 @@ public class UtenteController
 	        return null; // Se nessun utente ha quel token, ritorna null
 	    }
 	    
+	    @PostMapping("/getlogged")
+	    public Utente getUtenteByEmail(@RequestBody String email) {
+	    	
+	    	List<Utente> user = utenteRepository.findAll();
+			for(Utente u: user) {
+				
+
+				String mail = u.getEmail();
+				String otherMail = email;
+				otherMail = otherMail.substring(0, otherMail.length()-1);
+				otherMail = otherMail.substring(1, otherMail.length());
+
+				if(mail.equals(otherMail)) {
+					System.out.println("found him");
+					return u;}
+			}
+			System.out.println("returning null");
+			return null;
+	    }
 	    
 	    @GetMapping("/{id}")
 	    public Utente getAuthorById(@PathVariable Long id) {

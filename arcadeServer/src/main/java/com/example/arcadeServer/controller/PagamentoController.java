@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Pagamento;
@@ -39,25 +40,30 @@ public class PagamentoController
 	
 	//aggiungre un pagamento
 	@PostMapping("/add")
-	public ResponseEntity<?> addPagamento(@RequestBody Pagamento pagamento, HttpServletRequest request) {
-	    // Verifica autenticazione utente
-	    if (getAuthenticatedUser(request) == null) {
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Non autorizzato");
+	public Pagamento addPagamento(@RequestBody Pagamento pagamento, HttpServletRequest request) {
+	    // Ottieni l'utente autenticato tramite il token
+	    AuthUser authUser = getAuthenticatedUser(request);
+	    if (authUser == null) {
+	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Non autorizzato");
 	    }
 
-	    // Controlli sui campi obbligatori
-	    if (pagamento.getMetodo() == null || pagamento.getMetodo().isEmpty() ||
-	        pagamento.getImporto() <= 0 ||
-	        pagamento.getOrdine() == null || pagamento.getOrdine().getId() == null) {
-	        return ResponseEntity.badRequest().body("Dati pagamento non validi");
+	    // Verifica che i dati obbligatori siano presenti
+	    if (pagamento.getMetodo() == null || pagamento.getMetodo().isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Metodo di pagamento obbligatorio");
 	    }
-	    //setto lo stato di pagamento su Pagatamento eseguito
-	    pagamento.setStato("Pagamento eseguito.");
+	    if (pagamento.getImporto() <= 0) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "L'importo deve essere maggiore di zero");
+	    }
+	    if (pagamento.getOrdine() == null || pagamento.getOrdine().getId() == null) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "L'ordine associato è obbligatorio");
+	    }
 	    
-	    // Salvataggio e risposta
-	    return ResponseEntity.status(HttpStatus.CREATED).body(pagamentoRepository.save(pagamento));
+	    // Imposta lo stato su "Pagato" automaticamente
+	    pagamento.setStato("Pagato");
+	    
+	    // Salva il pagamento nel database e restituisce l'oggetto salvato
+	    return pagamentoRepository.save(pagamento);
 	}
-
 	
 	//metodo per ottenere il token dell'use autenticato
     //Recupera il token Bearer dalla richiesta.
