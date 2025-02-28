@@ -13,7 +13,7 @@ import com.example.arcadeServer.Service.PagamentoService;
 @CrossOrigin(origins = {})
 public class PayPalController {
 
-    private final PagamentoService pagamentoService;
+	/*private final PagamentoService pagamentoService;
 
     public PayPalController(PagamentoService pagamentoService) {
         this.pagamentoService = pagamentoService;
@@ -24,5 +24,5 @@ public class PayPalController {
                                         @RequestParam("PayerID") String payerId) {
         pagamentoService.aggiornaStatoPagamento(paymentId, "COMPLETATO");
         return "Pagamento completato con successo";
-    }
+    }*/
 }
