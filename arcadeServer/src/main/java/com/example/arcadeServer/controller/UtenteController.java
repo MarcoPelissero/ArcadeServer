@@ -38,8 +38,10 @@ public class UtenteController
 	    // Iniezione automatica del repository per interagire con il database
 	    @Autowired
 	    private UtenteRepository utenteRepository;
+
 	    @Autowired
 		private AuthUserRepository authRepo;
+
 	    @GetMapping
 	    public List<Utente> getAllUtenti() {
 	        return utenteRepository.findAll();
@@ -49,8 +51,49 @@ public class UtenteController
 	    public Utente createUtente(@RequestBody Utente utente) {
 	        return utenteRepository.save(utente);
 	    }
+	    @PostMapping("/getlogged")
+	    public Utente getUtenteByEmail(@RequestBody String email) {
+	    	
+	    	List<Utente> user = utenteRepository.findAll();
+			for(Utente u: user) {
+				
+
+				String mail = u.getEmail();
+				String otherMail = email;
+				otherMail = otherMail.substring(0, otherMail.length()-1);
+				otherMail = otherMail.substring(1, otherMail.length());
+
+				if(mail.equals(otherMail)) {
+					return u;}
+			}
+			return null;
+	    }
 	    
-	    //modifica email e password user
+	    @GetMapping("/{id}")
+	    public Utente getAuthorById(@PathVariable Long id) {
+	        return utenteRepository.findById(id)
+	                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	    }
+	    
+	    /*@PutMapping("/{id}")
+	    public Utente updateUtente(@PathVariable Long id, @RequestBody Utente utenteDetails) {
+	    	Utente utente = utenteRepository.findById(id)
+	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
+
+	       
+	        utente.setNome(utenteDetails.getNome());
+
+	        return utenteRepository.save(utenteDetails);
+	    }*/
+
+	    @DeleteMapping("/{id}")
+	    public void deleteUtente(@PathVariable Long id) {
+	        Utente utente = utenteRepository.findById(id)
+	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
+
+	        utenteRepository.delete(utente);
+	    }
+	    
 	    @PutMapping("/updateUser")
 	    public Object updateProfile(@RequestBody Map<String, String> updates, HttpServletRequest request, HttpServletResponse response) {
 	        // Ottieni l'utente autenticato tramite il token
@@ -78,6 +121,14 @@ public class UtenteController
 	            String newPassword = updates.get("password");
 	            user.setPassword(newPassword);
 	        }
+	        
+	        if (updates.containsKey("nome")) {
+	            user.setNome(updates.get("nome"));
+	        }
+	        if (updates.containsKey("cognome")) {
+	            user.setCognome(updates.get("cognome"));
+	        }
+
 
 	        // Salva l'utente aggiornato nel database
 	        utenteRepository.save(user);
@@ -124,50 +175,5 @@ public class UtenteController
 	            }
 	        }
 	        return null; // Se nessun utente ha quel token, ritorna null
-	    }
-	    
-	    @PostMapping("/getlogged")
-	    public Utente getUtenteByEmail(@RequestBody String email) {
-	    	
-	    	List<Utente> user = utenteRepository.findAll();
-			for(Utente u: user) {
-				
-
-				String mail = u.getEmail();
-				String otherMail = email;
-				otherMail = otherMail.substring(0, otherMail.length()-1);
-				otherMail = otherMail.substring(1, otherMail.length());
-
-				if(mail.equals(otherMail)) {
-					System.out.println("found him");
-					return u;}
-			}
-			System.out.println("returning null");
-			return null;
-	    }
-	    
-	    @GetMapping("/{id}")
-	    public Utente getAuthorById(@PathVariable Long id) {
-	        return utenteRepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-	    }
-	    
-	    /*@PutMapping("/{id}")
-	    public Utente updateUtente(@PathVariable Long id, @RequestBody Utente utenteDetails) {
-	    	Utente utente = utenteRepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
-
-	       
-	        utente.setNome(utenteDetails.getNome());
-
-	        return utenteRepository.save(utenteDetails);
-	    }*/
-
-	    @DeleteMapping("/{id}")
-	    public void deleteUtente(@PathVariable Long id) {
-	        Utente utente = utenteRepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
-
-	        utenteRepository.delete(utente);
 	    }
 }
