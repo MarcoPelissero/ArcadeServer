@@ -2,10 +2,7 @@ package com.example.arcadeServer.controller;
 
 import java.util.Collections;
 import java.util.List;
-
 import java.util.Map;
-
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.AuthUserRepository;
@@ -130,16 +126,6 @@ public class UtenteController
 	        return null; // Se nessun utente ha quel token, ritorna null
 	    }
 	    
-	    
-	    @GetMapping("/{id}")
-	    public Utente getAuthorById(@PathVariable Long id) {
-	        return utenteRepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-	    }
-	    
-
-	    @PutMapping("/{id}")
-
 	    @PostMapping("/getlogged")
 	    public Utente getUtenteByEmail(@RequestBody String email) {
 	    	
@@ -160,11 +146,13 @@ public class UtenteController
 			return null;
 	    }
 	    
-
-	    // Metodo per aggiornare un autore esistente
-	    // Mappato sulla richiesta HTTP PUT all'endpoint "/authors/{id}"
-	    @PutMapping("/{id}")
-
+	    @GetMapping("/{id}")
+	    public Utente getAuthorById(@PathVariable Long id) {
+	        return utenteRepository.findById(id)
+	                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	    }
+	    
+	    /*@PutMapping("/{id}")
 	    public Utente updateUtente(@PathVariable Long id, @RequestBody Utente utenteDetails) {
 	    	Utente utente = utenteRepository.findById(id)
 	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
@@ -173,7 +161,7 @@ public class UtenteController
 	        utente.setNome(utenteDetails.getNome());
 
 	        return utenteRepository.save(utenteDetails);
-	    }
+	    }*/
 
 	    @DeleteMapping("/{id}")
 	    public void deleteUtente(@PathVariable Long id) {

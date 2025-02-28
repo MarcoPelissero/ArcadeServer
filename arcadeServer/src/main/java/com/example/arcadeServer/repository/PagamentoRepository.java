@@ -9,6 +9,5 @@ import com.example.arcadeServer.model.Pagamento;
 
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long>
 {
-	Optional<Pagamento> findByTransactionId(String transactionId);
 
 }

@@ -30,14 +30,13 @@ public class PagamentoService {
         Pagamento pagamento = new Pagamento();
         pagamento.setOrdine(ordine);
         pagamento.setMetodo(metodo);
-        pagamento.setTransactionId(transactionId);
         pagamento.setStato(stato);
        
 
         return pagamentoRepository.save(pagamento);
     }
 
-    @Transactional
+    /*@Transactional
     public void aggiornaStatoPagamento(String transactionId, String nuovoStato) {
         Optional<Pagamento> pagamentoOpt = pagamentoRepository.findByTransactionId(transactionId);
         if (pagamentoOpt.isPresent()) {
@@ -47,5 +46,5 @@ public class PagamentoService {
         } else {
             throw new RuntimeException("Pagamento non trovato");
         }
-    }
+    }*/
 }

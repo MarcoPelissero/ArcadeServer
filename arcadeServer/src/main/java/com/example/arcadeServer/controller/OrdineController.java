@@ -15,14 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Ordine;
+import com.example.arcadeServer.model.Pagamento;
 import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.AuthUserRepository;
 import com.example.arcadeServer.repository.OrdineRepository;
 import com.example.arcadeServer.repository.UtenteRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -96,5 +99,65 @@ public class OrdineController
 		List<Ordine> ordini = ordineRepo.findOrdiniByUtenteId(user.getId()); // Recupera gli ordini dell'utente
 		return ResponseEntity.ok(ordini);
 	}
+	
+	//metodo per aggiungere un ordine
+	@PostMapping("/addOrdine")
+	public Ordine addOrdine(@RequestBody Ordine ordine, HttpServletRequest request){
+		// Ottieni l'utente autenticato tramite il token
+	    AuthUser authUser = getAuthenticatedUser(request);
+	    if (authUser == null) {
+	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Non autorizzato");
+	    }
+	 // Recupera l'utente dal database
+        Utente user = userRepository.findById(authUser.getId())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
+        
+        // Associa l'ordine all'utente autenticato
+        ordine.setUtente(user);
+        
+        // Salva l'ordine nel database
+        return ordineRepo.save(ordine);
+    }
+	
+	//metodo per ottenere il token dell'use autenticato
+    //Recupera il token Bearer dalla richiesta.
+    //Se il token è valido, cerca l'utente corrispondente e lo restituisce.
+    private AuthUser getAuthenticatedUser(HttpServletRequest request) {
+        // Estrai il token dalla richiesta
+        String token = getTokenFromRequest(request);
+        
+        if (token == null || token.isEmpty()) {
+            return null; // Nessun token trovato, quindi l'utente non è autenticato
+        }
+        
+        // Trova l'utente autenticato usando il token
+        return findUserByToken(token);
+    }
+
+    //Estrae il token Bearer dall'header "Authorization".
+    //Se il formato è corretto ("Bearer <TOKEN>"), rimuove "Bearer " e restituisce solo il token.
+    private String getTokenFromRequest(HttpServletRequest request) {
+        // Estrai l'header "Authorization" dalla richiesta
+        String authorizationHeader = request.getHeader("Authorization");
+
+        // Verifica che l'header contenga un token con il prefisso "Bearer"
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Rimuovi la parte "Bearer " (7 caratteri) per ottenere solo il token
+            return authorizationHeader.substring(7);
+        }
+        return null; // Se il token non è presente o non è nel formato corretto
+    }
+
+    //Cerca nel database un utente che abbia il token corrispondente.
+    //Se lo trova, lo restituisce. Altrimenti, ritorna null.
+    private AuthUser findUserByToken(String token) {
+        List<AuthUser> users = authRepo.findAll(); // Recupera tutti gli utenti dal repository
+        for (AuthUser u : users) {
+            if (u.getToken() != null && u.getToken().equals(token)) {
+                return u; // Restituisce l'utente se il token corrisponde
+            }
+        }
+        return null; // Se nessun utente ha quel token, ritorna null
+    }
 }
 
