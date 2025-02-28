@@ -20,35 +20,32 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Servizio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @NotNull
-    private String nome;
-    
+
+	 @Id
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
+	 private Long id;
+	 
+    private String nome; // Nome come chiave primaria
+
     @NotNull
     private String descrizione;
-    
-    @Min(value = 0, message = "Il prezzo deve essere non nullo")
-	@NotNull
+
+    @Min(value = 0, message = "Il prezzo deve essere maggiore o uguale a zero")
+    @NotNull
     private double prezzo;
-    
+
     @NotNull
     private String categoria;
 
     @OneToMany(mappedBy = "servizio")
     @JsonManagedReference(value = "servizio-ordini")
     private List<Ordine> ordini;
-    
-    @Column(name = "utente_id", updatable = false, insertable = false)
-    private Long utenteId;
-    
+
     @ManyToOne
     @JoinColumn(name = "utente_id")
     @JsonBackReference(value = "user-services")
     private Utente utente;
-    
+
     @OneToMany(mappedBy = "servizio")
     @JsonManagedReference(value = "servizio-recensioni")
     private List <Recensione> recensioni;
@@ -65,42 +62,43 @@ public class Servizio {
     
     public Servizio() {}
     
+
+
     public Long getId() {
-        return id;
-    }
+		return id;
+	}
 
-    // Imposta l'ID dell'autore
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    // Restituisce il nome dell'autore
+	// Getter e Setter per nome
     public String getNome() {
         return nome;
     }
 
-    // Imposta il nome dell'autore
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    // Getter e Setter per descrizione
     public String getDescrizione() {
         return descrizione;
     }
 
-    // Imposta l'ID dell'autore
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
-    // Restituisce il nome dell'autore
+    // Getter e Setter per prezzo
     public double getPrezzo() {
         return prezzo;
     }
 
-    // Imposta il nome dell'autore
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
     }
+
 
 	public String getCategoria() {
 		return categoria;
@@ -133,7 +131,4 @@ public class Servizio {
 	public void setRecensioni(List<Recensione> recensioni) {
 		this.recensioni = recensioni;
 	}
-	
-	
-   
 }
