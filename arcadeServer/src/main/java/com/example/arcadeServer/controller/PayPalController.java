@@ -19,10 +19,10 @@ public class PayPalController {
         this.pagamentoService = pagamentoService;
     }
 
-    @GetMapping("/paypal")
+   /* @GetMapping("/paypal")
     public String completePayPalPayment(@RequestParam("paymentId") String paymentId, 
                                         @RequestParam("PayerID") String payerId) {
         pagamentoService.aggiornaStatoPagamento(paymentId, "COMPLETATO");
         return "Pagamento completato con successo";
-    }
+    }*/
 }
