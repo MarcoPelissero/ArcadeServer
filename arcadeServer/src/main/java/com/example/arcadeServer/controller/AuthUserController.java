@@ -53,43 +53,41 @@ public class AuthUserController
 	
 	
 	@PostMapping("/login")
-	public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> body) // il corpo della HTTP da formato JSON si trasforma in Map 
-	{
-		Map<String, String> result = new HashMap<String, String>();
-		String email = body.get("email"); // Si ottiene il valore dell'email
-		String password = body.get("password"); // E della password
+	public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> body) {
+	    Map<String, String> result = new HashMap<>();
+	    String email = body.get("email");
+	    String password = body.get("password");
 
-		if (email == null || password == null)
-		{
-			result.put("errore", "Credenziali non valide");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result); // Imposta il body della richiesta come result
-		}
+	    if (email == null || password == null) {
+	        result.put("errore", "Credenziali non valide");
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+	    }
 
-		Optional<Utente> optionalUser = userRepository.findByEmail(email); // Cerca se esiste uno user con determinata email
-		if (!optionalUser.isPresent() || !optionalUser.get().getPassword().equals(password))
-		{
-			result.put("errore", "Credenziali non valide");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-		}
-		Utente user = optionalUser.get(); // Se esiste ottiene lo user
+	    Optional<Utente> optionalUser = userRepository.findByEmail(email);
+	    if (!optionalUser.isPresent() || !optionalUser.get().getPassword().equals(password)) {
+	        result.put("errore", "Credenziali non valide");
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+	    }
 
-		String token = AuthUser.generateToken(email);
-		Optional<AuthUser> authUser = authRepo.findByEmail(user.getEmail());
+	    Utente user = optionalUser.get();
+	    String token = AuthUser.generateToken(email);
 
-		if (authUser.isPresent()) // Se non è la prima volta che lo user fa l'accesso si cambia il token
-		{
-			authUser.get().setToken(token);
-			authRepo.save(authUser.get());
-		} else // Altrimenti si crea un nuovo user autenticato
-		{
-			AuthUser nuovoUser = new AuthUser(user.getEmail(), token);
-			authRepo.save(nuovoUser);
-		}
+	    // Verifica se l'utente esiste già nel sistema di autenticazione
+	    Optional<AuthUser> authUser = authRepo.findByEmail(user.getEmail());
+	    if (authUser.isPresent()) {
+	        authUser.get().setToken(token);
+	        authRepo.save(authUser.get());
+	    } else {
+	        AuthUser nuovoUser = new AuthUser(user.getEmail(), token);
+	        authRepo.save(nuovoUser);
+	    }
 
-		result.put("messaggio", "Login effettuato con successo");
-		result.put("token", token);
-		return ResponseEntity.ok(result);
+	    result.put("messaggio", "Login effettuato con successo");
+	    result.put("token", token);
+	    result.put("ruolo", user.getRuolo());  // Aggiungi il ruolo nella risposta
+	    return ResponseEntity.ok(result);
 	}
+
 	
 	/**
 	 * 

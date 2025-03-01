@@ -29,6 +29,7 @@ public class Ordine {
     
     private String email_utente;
     
+    
     @ManyToOne
     @JoinColumn(name = "utente_id")
     @JsonBackReference(value = "user-ordini")
@@ -39,6 +40,11 @@ public class Ordine {
     @JsonBackReference(value = "servizio-ordini")
     private Servizio servizio;
     
+//    @ManyToOne
+//    @JoinColumn(name = "servizio_id")
+//    @JsonManagedReference(value = "servizio-ordini")
+//    private Servizio servizio;
+//    
     @OneToOne(mappedBy = "ordine")
     @JsonBackReference
     private Pagamento pagamento;
@@ -96,8 +102,7 @@ public class Ordine {
 	public void setData(String data) {
 		this.data = data;
 	}
-	
-	
+
 
 	public String getNome_utente() {
 		return nome_utente;

@@ -40,6 +40,10 @@ public class Servizio {
     @OneToMany(mappedBy = "servizio")
     @JsonManagedReference(value = "servizio-ordini")
     private List<Ordine> ordini;
+    
+//    @OneToMany(mappedBy = "servizio")
+//    @JsonBackReference(value = "servizio-ordini")
+//    private List<Ordine> ordini;
 
     @ManyToOne
     @JoinColumn(name = "utente_id")

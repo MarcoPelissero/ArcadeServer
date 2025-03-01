@@ -1,6 +1,7 @@
 package com.example.arcadeServer.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -55,6 +56,20 @@ public class ServizioController
     public Servizio getServizioById(@PathVariable Long id) {
         // Cerca il servizio per ID, se non trovato lancia un'eccezione ResourceNotFoundException
         return servizioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Servizio not found"));
+    }
+    
+    @GetMapping("/getfreelance/{servid}")
+    public Utente getFreelancerByServizioId(@PathVariable Long servid) {
+        // Cerca il servizio per ID, se non trovato lancia un'eccezione ResourceNotFoundException
+    	
+    	Optional<Servizio> optServizio = servizioRepository.findById(servid);
+    	Servizio servizio = optServizio.get();
+    	
+    	Long freelancerId = servizio.getUtente().getId();
+
+    	
+        return utenteRepo.findById(freelancerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Servizio not found"));
     }
 
