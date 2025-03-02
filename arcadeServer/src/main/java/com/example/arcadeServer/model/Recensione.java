@@ -17,6 +17,7 @@ public class Recensione {
     private Long id;
     private String commento;
     private int voto;
+    private String titolo;
     
     @ManyToOne
     @JoinColumn(name = "utente_id")
@@ -28,11 +29,12 @@ public class Recensione {
     @JsonBackReference(value = "servizio-recensioni")
     private Servizio servizio;
     
-    public Recensione(String commento, int voto, Utente utente, Servizio servizio) {
+    public Recensione(String commento, int voto, Utente utente, Servizio servizio, String titolo) {
     	this.commento = commento;
     	this.voto = voto;
     	this.utente = utente;
     	this.servizio = servizio;
+    	this.titolo = titolo;
     }
     
     public Recensione() {}
@@ -73,6 +75,16 @@ public class Recensione {
 	public void setServizio(Servizio servizio) {
 		this.servizio = servizio;
 	}
+
+	public String getTitolo() {
+		return titolo;
+	}
+
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
+	}
+	
+	
     
     
 }

@@ -64,5 +64,25 @@ public class RecensioneController
 		 
 
 	 }
+	 
+	 @GetMapping("/myreviews/{utente_id}")
+	 public List<Recensione> getRecensioneByUtenteId(@PathVariable Long utente_id){
+		 List<Recensione> all = recensioneRepository.findAll();
+		 List<Recensione> myReviews = new ArrayList<Recensione>();
+		 for(Recensione r: all) {
+			 if(r.getUtente().getId()==utente_id) myReviews.add(r);
+		 }
+		 return myReviews;
+	 }
+	 
+//	 @GetMapping("/myreviews/{utente_id}")
+//	 public List<Recensione> getRecensioneByUtenteId(@PathVariable Long utente_id){
+//		 List<Recensione> all = recensioneRepository.findAll();
+//		 List<Recensione> myReviews = new ArrayList<Recensione>();
+//		 for(Recensione r: all) {
+//			 if(r.getUtente().getId()==utente_id) myReviews.add(r);
+//		 }
+//		 return myReviews;
+//	 }
 
 }

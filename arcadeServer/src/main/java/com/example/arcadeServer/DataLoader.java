@@ -110,28 +110,28 @@ public class DataLoader implements CommandLineRunner
 				
 			}
 			
-			if (recensioneRepository.count() == 0)
-			{
-				Recensione recensione = new Recensione("Servizio impeccabile, molto soddisfatto del risultato finale. Consigliatissimo!", 
-						4,
-						user3, 
-						servizio
-		
-				);
-				recensioneRepository.save(recensione);
-				
-				Recensione recensione1 = new Recensione("Molto professionale e veloce, ma avrei preferito una comunicazione un po' più rapida.", 
-						2,
-						user2,
-						servizio
-		
-				);
-				recensioneRepository.save(recensione1);
-				
-				
-				
-				
-			}
+//			if (recensioneRepository.count() == 0)
+//			{
+//				Recensione recensione = new Recensione("Servizio impeccabile, molto soddisfatto del risultato finale. Consigliatissimo!", 
+//						4,
+//						user3, 
+//						servizio
+//		
+//				);
+//				recensioneRepository.save(recensione);
+//				
+//				Recensione recensione1 = new Recensione("Molto professionale e veloce, ma avrei preferito una comunicazione un po' più rapida.", 
+//						2,
+//						user2,
+//						servizio
+//		
+//				);
+//				recensioneRepository.save(recensione1);
+//				
+//				
+//				
+//				
+//			}
 
 		
 			

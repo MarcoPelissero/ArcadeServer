@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -37,6 +39,8 @@ public class AuthUserController
 	 * @return result: messaggio di errore o di successo
 	 * Metodo che gestisce il login di uno user già esistente tramite email e password
 	 */
+	
+	
 	@PostMapping("/profile")
 	public AuthUser authUser (@RequestBody Object token) {
 		List<AuthUser> user = authRepo.findAll();
@@ -46,6 +50,7 @@ public class AuthUserController
 		}
 		return null;
 	}
+	
 	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> body) {
@@ -63,12 +68,11 @@ public class AuthUserController
 	        result.put("errore", "Credenziali non valide");
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
 	    }
-	    
+
 	    Utente user = optionalUser.get();
 	    String token = AuthUser.generateToken(email);
 
-
-	 // Verifica se l'utente esiste già nel sistema di autenticazione
+	    // Verifica se l'utente esiste già nel sistema di autenticazione
 	    Optional<AuthUser> authUser = authRepo.findByEmail(user.getEmail());
 	    if (authUser.isPresent()) {
 	        authUser.get().setToken(token);
@@ -83,6 +87,7 @@ public class AuthUserController
 	    result.put("ruolo", user.getRuolo());  // Aggiungi il ruolo nella risposta
 	    return ResponseEntity.ok(result);
 	}
+
 	
 	/**
 	 * 

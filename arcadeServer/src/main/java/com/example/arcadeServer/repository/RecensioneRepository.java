@@ -14,6 +14,8 @@ public interface RecensioneRepository extends JpaRepository<Recensione, Long>
 	Optional<Recensione> findByVoto(int voto);
 	
 	Optional<Recensione> findAllByServizioId(Long id);
+	
+	Optional<Recensione> findAllByUtenteId(Long id);
 
 
 
