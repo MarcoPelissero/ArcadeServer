@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.arcadeServer.model.AuthUser;
 import com.example.arcadeServer.model.Utente;
 import com.example.arcadeServer.repository.AuthUserRepository;
@@ -92,6 +94,26 @@ public class UtenteController
 	                .orElseThrow(() -> new ResourceNotFoundException("Utente not found"));
 
 	        utenteRepository.delete(utente);
+	    }
+	    
+	    @GetMapping("/getAuthenticatedUser")
+	    public Utente getAuthenticatedUserData(HttpServletRequest request) {
+	        // Recupera l'utente autenticato tramite il token
+	        AuthUser authUser = getAuthenticatedUser(request);
+	        
+	        if (authUser == null) {
+	            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Non autorizzato");
+	        }
+
+	        // Trova l'utente nel database tramite la sua email
+	        Optional<Utente> userOpt = utenteRepository.findByEmail(authUser.getEmail());
+	        
+	        if (!userOpt.isPresent()) {
+	            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato");
+	        }
+
+	        // Restituisci direttamente l'utente trovato
+	        return userOpt.get();
 	    }
 	    
 	    @PutMapping("/updateUser")
